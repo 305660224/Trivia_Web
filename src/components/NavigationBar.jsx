@@ -1,3 +1,5 @@
+import Button from "./Button";
+
 export default function NavigationBar () {
     return (
        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -7,7 +9,11 @@ export default function NavigationBar () {
           Trivia App
         </a>
 
-        /* Flata del button */
+        <Button
+        texto= "Login"
+        tipo= "success"
+        onClick={() => alert("Ir a login")}
+        />
 
         <div className="collapse navbar-collapse" id="navbarContent">
 
