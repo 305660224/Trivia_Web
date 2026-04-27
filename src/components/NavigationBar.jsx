@@ -6,7 +6,7 @@ export default function NavigationBar () {
       <div className="container-fluid">
 
         <a className="navbar-brand" href="/">
-          Trivia App
+          Trivia Game
         </a>
 
         <Button
