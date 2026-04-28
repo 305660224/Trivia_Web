@@ -1,0 +1,34 @@
+export async function TriviaApi(config) {
+    try {
+        let url = `https://the-trivia-api.com/api/questions?limit=${config.cantidad}`
+
+        if (config.categoria) {
+            url += `&categories=${config.categoria}`;
+        }
+
+        if (config.dificultad) {
+            url += `&difficulty=${config.dificultad}`;
+        }
+
+        const res = await fetch(url);
+
+        if (!res.ok) {
+            throw new Error("Error en la API");
+        }
+
+        const data = await res.json();
+
+        return data.map(p => ({
+            pregunta: p.question,
+            opciones: [...p.incorrectAnswers, p.correctAnswer]
+                .sort(() => Math.random() - 0.5),
+            correcta: p.correctAnswer,
+            dificultad: p.difficulty
+        }));
+
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
