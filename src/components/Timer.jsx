@@ -1,22 +1,28 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-export default function Timer ({tiempInicial, onTiempoFinal}) {
+export default function Timer({ tiempoInicial, onTiempoFin }) {
 
-    const [tiempo, setTiempo] = useState(tiempInicial)
+  const [tiempo, setTiempo] = useState(tiempoInicial);
 
-   useEffect(() => {
-    if (tiempo === 0) {
-      onTiempoFin();
+  
+  useEffect(() => {
+    setTiempo(tiempoInicial);
+  }, [tiempoInicial]);
+
+  
+  useEffect(() => {
+    if (tiempo <= 0) {
+      onTiempoFin(); 
       return;
     }
 
     const intervalo = setTimeout(() => {
-      setTiempo(tiempo - 1);
+      setTiempo((prev) => prev - 1);
     }, 1000);
 
     return () => clearTimeout(intervalo);
-  }, [tiempo]);
+  }, [tiempo, onTiempoFin]);
 
   return (
     <div className="text-center mb-3">
@@ -26,6 +32,6 @@ export default function Timer ({tiempInicial, onTiempoFinal}) {
 }
 
 Timer.propTypes = {
-  tiempoInicial: PropTypes.number,
-  onTiempoFin: PropTypes.func
+  tiempoInicial: PropTypes.number.isRequired,
+  onTiempoFin: PropTypes.func.isRequired
 };

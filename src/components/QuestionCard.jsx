@@ -1,46 +1,47 @@
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
+import Button from "./Button";
 
-const QuestionCard = ({ pregunta, dificultad, numero, total }) => {
-  const getDifficultyColor = (level) => {
-    if (!level) return 'secondary';
-    const normalized = level.toLowerCase();
-    if (normalized === 'easy') return 'success';
-    if (normalized === 'medium') return 'warning';
-    if (normalized === 'hard') return 'danger';
-    return 'secondary';
-  };
-
-  const getDifficultyText = (level) => {
-    if (!level) return 'Normal';
-    const normalized = level.toLowerCase();
-    if (normalized === 'easy') return 'Fácil';
-    if (normalized === 'medium') return 'Media';
-    if (normalized === 'hard') return 'Difícil';
-    return level;
-  };
-
+export default function QuestionCard({
+  pregunta,
+  opciones,
+  onRespuesta,
+  dificultad,
+  numero,
+  total,
+  deshabilitado
+}) {
   return (
-    <div className="card shadow-lg mb-4">
-      <div className="card-header bg-primary text-white">
-        <div className="d-flex justify-content-between align-items-center">
-          <span>Pregunta {numero} de {total}</span>
-          <span className={`badge bg-${getDifficultyColor(dificultad)}`}>
-            {getDifficultyText(dificultad)}
-          </span>
-        </div>
-      </div>
-      <div className="card-body">
-        <h3 className="card-title text-center mb-0">{pregunta}</h3>
+    <div className="text-center">
+
+      <p className="text-muted">
+        Pregunta {numero} de {total} | Dificultad: {dificultad}
+      </p>
+
+      <h4 className="mb-4">{pregunta}</h4>
+
+      <div className="row">
+        {opciones.map((opcion, index) => (
+          <div className="col-6 mb-3" key={index}>
+            <Button
+              texto={opcion}
+              tipo={["danger", "primary", "success", "warning"][index]}
+              onClick={() => onRespuesta(opcion)}
+              disabled={deshabilitado} 
+            />
+          </div>
+        ))}
       </div>
     </div>
   );
-};
+}
 
 QuestionCard.propTypes = {
   pregunta: PropTypes.string.isRequired,
+  opciones: PropTypes.array.isRequired,
+  onRespuesta: PropTypes.func.isRequired,
   dificultad: PropTypes.string,
   numero: PropTypes.number,
-  total: PropTypes.number
+  total: PropTypes.number,
+  deshabilitado: PropTypes.bool
 };
 
-export default QuestionCard;

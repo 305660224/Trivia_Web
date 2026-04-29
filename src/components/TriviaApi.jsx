@@ -1,6 +1,6 @@
 export async function TriviaApi(config) {
     try {
-        let url = `https://the-trivia-api.com/api/questions?limit=${config.cantidad}`
+        let url = `https://the-trivia-api.com/api/questions?limit=${config.cantidad}`;
 
         if (config.categoria) {
             url += `&categories=${config.categoria}`;
@@ -18,13 +18,25 @@ export async function TriviaApi(config) {
 
         const data = await res.json();
 
-        return data.map(p => ({
-            pregunta: p.question,
-            opciones: [...p.incorrectAnswers, p.correctAnswer]
-                .sort(() => Math.random() - 0.5),
-            correcta: p.correctAnswer,
-            dificultad: p.difficulty
-        }));
+       return data.map(p => {
+    let textoPregunta = "";
+
+    if (typeof p.question === "string") {
+        textoPregunta = p.question;
+    } else if (p.question?.text) {
+        textoPregunta = p.question.text;
+    } else {
+        textoPregunta = "Pregunta no disponible";
+    }
+
+    return {
+        pregunta: textoPregunta,
+        opciones: [...p.incorrectAnswers, p.correctAnswer]
+            .sort(() => Math.random() - 0.5),
+        correcta: p.correctAnswer,
+        dificultad: p.difficulty
+    };
+});
 
 
     } catch (error) {
