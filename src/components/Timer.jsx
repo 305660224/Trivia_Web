@@ -1,37 +1,35 @@
-import { useState, useEffect } from "react";
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
-export default function Timer({ tiempoInicial, onTiempoFin }) {
+const TimerProgress = ({ tiempoRestante, tiempoMaximo }) => {
 
-  const [tiempo, setTiempo] = useState(tiempoInicial);
+  const porcentaje = (tiempoRestante / tiempoMaximo) * 100;
 
-  
-  useEffect(() => {
-    setTiempo(tiempoInicial);
-  }, [tiempoInicial]);
+  let color = 'bg-success';
 
-  
-  useEffect(() => {
-    if (tiempo <= 0) {
-      onTiempoFin(); 
-      return;
-    }
-
-    const intervalo = setTimeout(() => {
-      setTiempo((prev) => prev - 1);
-    }, 1000);
-
-    return () => clearTimeout(intervalo);
-  }, [tiempo, onTiempoFin]);
+  if (porcentaje < 50) color = 'bg-warning';
+  if (porcentaje < 25) color = 'bg-danger';
 
   return (
-    <div className="text-center mb-3">
-      <h5 className="text-danger">Tiempo: {tiempo}s</h5>
+    <div className="mb-3">
+      <div className="d-flex justify-content-between">
+        <span>Tiempo</span>
+        <span>{tiempoRestante}s</span>
+      </div>
+
+      <div className="progress">
+        <div
+          className={`progress-bar ${color}`}
+          role="progressbar"
+          style={{ width: `${porcentaje}%` }}
+        />
+      </div>
     </div>
   );
-}
-
-Timer.propTypes = {
-  tiempoInicial: PropTypes.number.isRequired,
-  onTiempoFin: PropTypes.func.isRequired
 };
+
+TimerProgress.propTypes = {
+  tiempoRestante: PropTypes.number.isRequired,
+  tiempoMaximo: PropTypes.number.isRequired
+};
+
+export default TimerProgress;

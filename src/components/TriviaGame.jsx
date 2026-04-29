@@ -21,7 +21,9 @@ const TriviaGame = ({ configuracion, onGameComplete }) => {
   const [mensajeFeedback, setMensajeFeedback] = useState('');
 
   const tiempoAgotadoRef = useRef(false);
+  const tiempoRef = useRef(0); // 🔥 tiempo real sincronizado
 
+  // ⏱️ tiempo por dificultad
   const getTiempoPorDificultad = (dificultad) => {
     switch (dificultad?.toLowerCase()) {
       case 'easy': return 30;
@@ -31,6 +33,17 @@ const TriviaGame = ({ configuracion, onGameComplete }) => {
     }
   };
 
+  // 🧮 puntos tipo Kahoot (por rangos)
+  const calcularPuntos = (tiempoRestante, tiempoMaximo) => {
+    const porcentaje = tiempoRestante / tiempoMaximo;
+
+    if (porcentaje >= 0.75) return 200;
+    if (porcentaje >= 0.5) return 150;
+    if (porcentaje >= 0.25) return 120;
+    return 100;
+  };
+
+  // 📥 cargar preguntas
   useEffect(() => {
     const cargarPreguntas = async () => {
       setCargando(true);
@@ -52,18 +65,24 @@ const TriviaGame = ({ configuracion, onGameComplete }) => {
     cargarPreguntas();
   }, [configuracion]);
 
+  // 🎯 configurar pregunta
   useEffect(() => {
     if (preguntas.length > 0 && indiceActual < preguntas.length) {
       const pregunta = preguntas[indiceActual];
+
+      const tiempoInicial = getTiempoPorDificultad(pregunta.dificultad);
+
       setPreguntaActual(pregunta);
-      setTiempoRestante(getTiempoPorDificultad(pregunta.dificultad));
+      setTiempoRestante(tiempoInicial);
+      tiempoRef.current = tiempoInicial; // 🔥 sincroniza tiempo real
+
       setRespuestaSeleccionada(false);
       setMensajeFeedback('');
-
-      tiempoAgotadoRef.current = false; 
+      tiempoAgotadoRef.current = false;
     }
   }, [indiceActual, preguntas]);
 
+  // ➡️ siguiente pregunta
   const siguientePregunta = useCallback(() => {
     setIndiceActual((prev) => {
       const siguiente = prev + 1;
@@ -87,6 +106,7 @@ const TriviaGame = ({ configuracion, onGameComplete }) => {
     });
   }, [preguntas.length, onGameComplete, puntuacion, aciertos]);
 
+  // ⏰ tiempo agotado
   const manejarTiempoAgotado = useCallback(() => {
     if (respuestaSeleccionada || tiempoAgotadoRef.current) return;
 
@@ -98,28 +118,32 @@ const TriviaGame = ({ configuracion, onGameComplete }) => {
     setTimeout(() => {
       siguientePregunta();
     }, 1500);
-
   }, [respuestaSeleccionada, siguientePregunta]);
 
-  
+  // ⏳ timer
   useEffect(() => {
     if (cargando || juegoTerminado || respuestaSeleccionada || !preguntaActual) return;
 
     const timer = setInterval(() => {
       setTiempoRestante((prev) => {
+        const nuevoTiempo = prev - 1;
+
+        tiempoRef.current = nuevoTiempo; // 🔥 sincronización real
+
         if (prev <= 1) {
           clearInterval(timer);
           manejarTiempoAgotado();
           return 0;
         }
-        return prev - 1;
+
+        return nuevoTiempo;
       });
     }, 1000);
 
     return () => clearInterval(timer);
   }, [cargando, juegoTerminado, respuestaSeleccionada, preguntaActual, manejarTiempoAgotado]);
 
-  
+  // ✅ responder
   const manejarRespuesta = useCallback((respuesta) => {
     if (respuestaSeleccionada) return;
 
@@ -128,9 +152,13 @@ const TriviaGame = ({ configuracion, onGameComplete }) => {
     const esCorrecta = respuesta === preguntaActual?.correcta;
 
     if (esCorrecta) {
-      setPuntuacion(prev => prev + 100);
+      const tiempoMaximo = getTiempoPorDificultad(preguntaActual.dificultad);
+      const puntosGanados = calcularPuntos(tiempoRef.current, tiempoMaximo);
+
+      setPuntuacion(prev => prev + puntosGanados);
       setAciertos(prev => prev + 1);
-      setMensajeFeedback('✅ Correcta');
+
+      setMensajeFeedback(`✅ Correcta +${puntosGanados} pts`);
     } else {
       setMensajeFeedback(`❌ Incorrecto. Era: ${preguntaActual?.correcta}`);
     }
@@ -141,7 +169,7 @@ const TriviaGame = ({ configuracion, onGameComplete }) => {
 
   }, [preguntaActual, respuestaSeleccionada, siguientePregunta]);
 
-  
+  // 🔄 reiniciar
   const reiniciarJuego = () => {
     setJuegoTerminado(false);
     setIndiceActual(0);
@@ -162,7 +190,6 @@ const TriviaGame = ({ configuracion, onGameComplete }) => {
     recargar();
   };
 
-  
   if (cargando) return <LoadingSpinner />;
   if (!preguntaActual) return <div className="text-center mt-4">Error cargando la pregunta</div>;
 
@@ -170,7 +197,6 @@ const TriviaGame = ({ configuracion, onGameComplete }) => {
     ? Math.round((aciertos / (indiceActual + (respuestaSeleccionada ? 1 : 0))) * 100)
     : 0;
 
-  
   return (
     <div className="container py-4">
 
@@ -221,7 +247,6 @@ const TriviaGame = ({ configuracion, onGameComplete }) => {
     </div>
   );
 };
-
 
 TriviaGame.propTypes = {
   configuracion: PropTypes.shape({
