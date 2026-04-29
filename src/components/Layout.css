@@ -1,0 +1,8 @@
+.layout {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.layout-main {
+  padding: 20px 0;
+}
