@@ -103,7 +103,7 @@ function App() {
                           onChange={(e) => setDificultad(e.target.value)}
                         />
                         <label className="form-check-label text-success" htmlFor="facil">
-                          🟢 Fácil
+                          Fácil
                         </label>
                       </div>
                       <div className="form-check flex-fill">
@@ -117,7 +117,7 @@ function App() {
                           onChange={(e) => setDificultad(e.target.value)}
                         />
                         <label className="form-check-label text-warning" htmlFor="medio">
-                          🟡 Media
+                          Media
                         </label>
                       </div>
                       <div className="form-check flex-fill">
@@ -131,7 +131,7 @@ function App() {
                           onChange={(e) => setDificultad(e.target.value)}
                         />
                         <label className="form-check-label text-danger" htmlFor="dificil">
-                          🔴 Difícil
+                          Difícil
                         </label>
                       </div>
                     </div>
@@ -165,7 +165,7 @@ function App() {
                     className="btn btn-primary btn-lg w-100 py-3 fw-bold fs-4 mt-3"
                     onClick={() => setJuegoIniciado(true)}
                   >
-                    🚀 Comenzar Juego
+                    Comenzar Partida
                   </button>
 
                   {/* Separador */}
