@@ -10,6 +10,7 @@ function App() {
   const [categoria, setCategoria] = useState('');
   const [dificultad, setDificultad] = useState('');
   const [cantidad, setCantidad] = useState(10);
+  const [traduccionActivada, setTraduccionActivada] = useState(false);
 
   const configuracionJuego = {
     cantidad: cantidad,
@@ -45,6 +46,28 @@ function App() {
                     Configuracion de la Partida:
                   </h3>
                 </div>
+
+                  {/*SWITCH(no de redes xd) TRADUCCIÓN */}
+                  <div className="mb-4 p-3 bg-light rounded">
+                    <div className="d-flex justify-content-between align-items-center">
+                      <div>
+                        <i className="bi bi-translate me-2 text-primary fs-4"></i>
+                        <strong className="fs-5">Traducción de Ingles - Español</strong>
+                      </div>
+                      <div className="form-check form-switch">
+                        <input
+                          className="form-check-input fs-3"
+                          type="checkbox"
+                          id="traduccionSwitch"
+                          checked={traduccionActivada}
+                          onChange={(e) => setTraduccionActivada(e.target.checked)}
+                          style={{ cursor: 'pointer' }}
+                        />
+                        <label className="form-check-label fw-bold ms-2" htmlFor="traduccionSwitch">
+                        </label>
+                      </div>
+                    </div>
+                  </div>
                 
                 <div className="card-body p-4">
                   {/* SELECCION DE CATEGORIa */}
@@ -187,6 +210,7 @@ function App() {
             <TriviaGame 
               configuracion={configuracionJuego}
               onGameComplete={handleGameComplete}
+              traduccionActivada={traduccionActivada}
             />
             <div className="text-center mt-4">
               <button 
