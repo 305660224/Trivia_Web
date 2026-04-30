@@ -6,6 +6,8 @@ import ScoreBoard from './ScoreBoard';
 import GameOverModal from './GameOverModal';
 import LoadingSpinner from './LoadingSpinner';
 import { TriviaApi } from './TriviaApi';
+import AnswerResults from './AnswerResults';
+import Button from './Button';
 
 const TriviaGame = ({ configuracion, onGameComplete }) => {
 
@@ -18,7 +20,8 @@ const TriviaGame = ({ configuracion, onGameComplete }) => {
   const [cargando, setCargando] = useState(true);
   const [juegoTerminado, setJuegoTerminado] = useState(false);
   const [respuestaSeleccionada, setRespuestaSeleccionada] = useState(false);
-  const [mensajeFeedback, setMensajeFeedback] = useState('');
+  const [estadisticas, setEstadisticas] = useState({})
+  const [puntosGanados, setPuntosGanados] = useState(0);
 
   const tiempoAgotadoRef = useRef(false);
   const tiempoRef = useRef(0); // 🔥 tiempo real sincronizado
@@ -77,8 +80,14 @@ const TriviaGame = ({ configuracion, onGameComplete }) => {
       tiempoRef.current = tiempoInicial; // 🔥 sincroniza tiempo real
 
       setRespuestaSeleccionada(false);
-      setMensajeFeedback('');
+     
       tiempoAgotadoRef.current = false;
+
+      const conteo = {}
+      pregunta.opciones.forEach(op => {
+        conteo[op] = 0
+      });
+      setEstadisticas(conteo)
     }
   }, [indiceActual, preguntas]);
 
@@ -113,11 +122,7 @@ const TriviaGame = ({ configuracion, onGameComplete }) => {
     tiempoAgotadoRef.current = true;
 
     setRespuestaSeleccionada(true);
-    setMensajeFeedback('⏰ ¡Tiempo agotado!');
-
-    setTimeout(() => {
-      siguientePregunta();
-    }, 1500);
+    
   }, [respuestaSeleccionada, siguientePregunta]);
 
   // ⏳ timer
@@ -148,6 +153,12 @@ const TriviaGame = ({ configuracion, onGameComplete }) => {
     if (respuestaSeleccionada) return;
 
     setRespuestaSeleccionada(true);
+    setPuntosGanados(0)
+
+    setEstadisticas(prev => ({
+  ...prev,
+  [respuesta]: (prev[respuesta] || 0) + 1
+}));
 
     const esCorrecta = respuesta === preguntaActual?.correcta;
 
@@ -155,17 +166,11 @@ const TriviaGame = ({ configuracion, onGameComplete }) => {
       const tiempoMaximo = getTiempoPorDificultad(preguntaActual.dificultad);
       const puntosGanados = calcularPuntos(tiempoRef.current, tiempoMaximo);
 
+      setPuntosGanados(puntosGanados);
       setPuntuacion(prev => prev + puntosGanados);
       setAciertos(prev => prev + 1);
 
-      setMensajeFeedback(`✅ Correcta +${puntosGanados} pts`);
-    } else {
-      setMensajeFeedback(`❌ Incorrecto. Era: ${preguntaActual?.correcta}`);
     }
-
-    setTimeout(() => {
-      siguientePregunta();
-    }, 1500);
 
   }, [preguntaActual, respuestaSeleccionada, siguientePregunta]);
 
@@ -223,17 +228,30 @@ const TriviaGame = ({ configuracion, onGameComplete }) => {
         deshabilitado={respuestaSeleccionada}
       />
 
-      {mensajeFeedback && (
-        <div className={`alert ${
-          mensajeFeedback.includes('Correcta')
-            ? 'alert-success'
-            : mensajeFeedback.includes('Tiempo')
-            ? 'alert-warning'
-            : 'alert-danger'
-        } mt-3 text-center`}>
-          {mensajeFeedback}
-        </div>
-      )}
+      {respuestaSeleccionada && (
+  <>
+    {puntosGanados > 0 && (
+      <div className="alert alert-success text-center fs-4 fw-bold">
+        +{puntosGanados} pts
+      </div>
+    )}
+
+    <AnswerResults
+      pregunta={preguntaActual}
+      estadisticas={estadisticas}
+    />
+
+    <div className="text-center mt-4">
+      <Button
+        texto="Siguiente"
+        tipo="primary"
+        onClick={siguientePregunta}
+      />
+    </div>
+  </>
+)}
+
+
 
       <GameOverModal
         show={juegoTerminado}
