@@ -10,14 +10,14 @@ const TimerProgress = ({ tiempoRestante, tiempoMaximo }) => {
   };
 
   return (
-    <div className="mb-4">
+    <div className="timer-neon-box mb-4">
       <div className="d-flex justify-content-between mb-1">
         <small>Tiempo restante</small>
         <small className={`fw-bold ${tiempoRestante <= 5 ? 'text-danger' : ''}`}>
           {tiempoRestante} segundos
         </small>
       </div>
-      <div className="progress" style={{ height: '10px' }}>
+      <div className="progress" style={{ height: '12px' }}>
         <div 
           className={`progress-bar ${getColor()} progress-bar-striped progress-bar-animated`}
           style={{ width: `${porcentaje}%` }}

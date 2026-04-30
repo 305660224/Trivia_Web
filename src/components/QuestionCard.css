@@ -1,0 +1,41 @@
+.trivia-neon-container {
+  background: radial-gradient(circle, #516af9 0%, #070b1f 100%);
+  padding: 30px;
+  border-radius: 20px;
+  color: white;
+}
+
+.question-neon-box {
+  background: linear-gradient(135deg, #2d2a8f, #b90000);
+  border: 3px solid #ff8bd8;
+  box-shadow: 0 0 18px #ff8bd8;
+  border-radius: 18px;
+  padding: 30px;
+  margin-bottom: 35px;
+  text-align: center;
+}
+
+.answer-neon-btn {
+  width: 100%;
+  border: 3px solid #ff8bd8;
+  border-radius: 25px;
+  background: #070b1f;
+  color: white;
+  padding: 14px;
+  font-weight: bold;
+  box-shadow: 0 0 12px #305cff;
+  transition: 0.2s;
+}
+
+.answer-neon-btn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 20px #ff8bd8;
+}
+
+.answer-letter {
+  background: #1da1f2;
+  color: white;
+  border-radius: 50%;
+  padding: 5px 10px;
+  margin-right: 10px;
+}

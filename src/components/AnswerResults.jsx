@@ -4,14 +4,14 @@ export default function AnswerResults({ pregunta, estadisticas }) {
   const total = Object.values(estadisticas).reduce((a, b) => a + b, 0);
 
   return (
-    <div className="card shadow mt-4">
-      <div className="card-header bg-dark text-white text-center">
+    <div className="card shadow answer-neon-card mt-4">
+      <div className="card-header answer-neon-header text-white text-center">
         Resultado de la pregunta
       </div>
 
       <div className="card-body">
         <h5 className="text-center mb-4">
-          Respuesta correcta: <span className="text-success">{pregunta.correcta}</span>
+          Respuesta correcta: <span className="text-neon-success">{pregunta.correcta}</span>
         </h5>
 
         {pregunta.opciones.map((opcion, index) => {
@@ -26,7 +26,7 @@ export default function AnswerResults({ pregunta, estadisticas }) {
                 <span>{cantidad} respuesta(s)</span>
               </div>
 
-              <div className="progress">
+              <div className="progress answer-progress">
                 <div
                   className={`progress-bar ${esCorrecta ? 'bg-success' : 'bg-secondary'}`}
                   style={{ width: `${porcentaje}%` }}

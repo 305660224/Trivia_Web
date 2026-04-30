@@ -10,7 +10,7 @@ import AnswerResults from './AnswerResults';
 import Button from './Button';
 import musicaFondo from '../audio/musica.mp3'; 
 import audioRespuesta from '../audio/respuesta.mp3'; 
-
+import './QuestionCard.css';
 
 const TriviaGame = ({ configuracion, onGameComplete, traduccionActivada = false, user, onVolverInicio }) => {
 

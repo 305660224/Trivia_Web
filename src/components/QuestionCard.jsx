@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import Button from "./Button";
+import './QuestionCard.css';
 
 export default function QuestionCard({
   pregunta,
@@ -11,28 +12,34 @@ export default function QuestionCard({
   deshabilitado
 }) {
   return (
-    <div className="text-center">
+  <div className="trivia-neon-container">
 
-      <p className="text-muted">
+    <div className="question-neon-box">
+      <p className="mb-2">
         Pregunta {numero} de {total} | Dificultad: {dificultad}
       </p>
-
-      <h4 className="mb-4">{pregunta}</h4>
-
-      <div className="row">
-        {opciones.map((opcion, index) => (
-          <div className="col-6 mb-3" key={index}>
-            <Button
-              texto={opcion}
-              tipo={["danger", "primary", "success", "warning"][index]}
-              onClick={() => onRespuesta(opcion)}
-              disabled={deshabilitado} 
-            />
-          </div>
-        ))}
-      </div>
+      <h3>{pregunta}</h3>
     </div>
-  );
+
+    <div className="row">
+      {opciones.map((opcion, index) => (
+        <div className="col-md-6 mb-4" key={index}>
+          <button
+            className="answer-neon-btn"
+            onClick={() => onRespuesta(opcion)}
+            disabled={deshabilitado}
+          >
+            <span className="answer-letter">
+              {["A", "B", "C", "D"][index]}
+            </span>
+            {opcion}
+          </button>
+        </div>
+      ))}
+    </div>
+
+  </div>
+);
 }
 
 QuestionCard.propTypes = {

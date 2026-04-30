@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="bg-dark text-white mt-5 pt-4 pb-3">
+    <footer className="footer-neon text-white">
       <div className="container">
 
         <div className="row text-center text-md-start align-items-center">

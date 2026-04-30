@@ -74,7 +74,7 @@ function App() {
   return (
     <Layout>
       <NavigationBar />
-      
+
       <div className="container mt-5">
         {!juegoIniciado ? (
           <div className="row justify-content-center">
@@ -88,44 +88,42 @@ function App() {
               )}
 
               {/* ENCABEZADO PAGINA */}
-              <div className="text-center mb-5">
-                <h1 className="display-3 fw-bold text-primary mb-3">Trivia Game Project</h1>
-                <p className="lead text-muted">
-                  Proyecto Tecnologias y Sistemas Web I :P
-                </p>
-              </div>
+              <h1 className="display-4 fw-bold text-primary mb-2">
+                🎮 Trivia Game
+              </h1>
+              <p className="lead text-muted">
+                Elige una categoría, responde rápido y acumula puntos
+              </p>
 
               {/* CARD DE CONFIGURACION DE PARTIDA*/}
-              <div className="card shadow-lg border-0 rounded-4">
-                <div className="card-header bg-gradient bg-primary text-white rounded-top-4 py-3">
-                  <h3 className="mb-0 text-center">
-                    <i className="bi bi-gear-fill me-2"></i>
-                    Configuracion de la Partida:
-                  </h3>
+              <div className="card shadow-lg border-0 rounded-4 overflow-hidden menu-neon-card fade-in">
+                <div className="card-header menu-neon-header text-white py-4 text-center">
+                  <h2 className="mb-1 fw-bold">🎯 Configuración de la partida</h2>
+                  <p className="mb-0">Personaliza tu reto antes de comenzar</p>
                 </div>
 
-                  {/*SWITCH(no de redes xd) TRADUCCIÓN */}
-                  <div className="mb-4 p-3 bg-light rounded">
-                    <div className="d-flex justify-content-between align-items-center">
-                      <div>
-                        <i className="bi bi-translate me-2 text-primary fs-4"></i>
-                        <strong className="fs-5">Traducción de Ingles - Español</strong>
-                      </div>
-                      <div className="form-check form-switch">
-                        <input
-                          className="form-check-input fs-3"
-                          type="checkbox"
-                          id="traduccionSwitch"
-                          checked={traduccionActivada}
-                          onChange={(e) => setTraduccionActivada(e.target.checked)}
-                          style={{ cursor: 'pointer' }}
-                        />
-                        <label className="form-check-label fw-bold ms-2" htmlFor="traduccionSwitch">
-                        </label>
-                      </div>
+                {/*SWITCH(no de redes xd) TRADUCCIÓN */}
+                <div className="mb-4 p-3 rounded menu-neon-section">
+                  <div className="d-flex justify-content-between align-items-center">
+                    <div>
+                      <i className="bi bi-translate me-2 text-primary fs-4"></i>
+                      <strong className="fs-5">Traducción de Ingles - Español</strong>
+                    </div>
+                    <div className="form-check form-switch">
+                      <input
+                        className="form-check-input fs-3"
+                        type="checkbox"
+                        id="traduccionSwitch"
+                        checked={traduccionActivada}
+                        onChange={(e) => setTraduccionActivada(e.target.checked)}
+                        style={{ cursor: 'pointer' }}
+                      />
+                      <label className="form-check-label fw-bold ms-2" htmlFor="traduccionSwitch">
+                      </label>
                     </div>
                   </div>
-                
+                </div>
+
                 <div className="card-body p-4">
                   {/* SELECCION DE CATEGORIA */}
                   <div className="mb-4">
@@ -133,7 +131,7 @@ function App() {
                       <i className="bi bi-tag-fill me-2 text-primary"></i>
                       ₍^. .^₎⟆ Categoría seleccionada:
                     </label>
-                    <select 
+                    <select
                       className="form-select form-select-lg border-2"
                       value={categoria}
                       onChange={(e) => setCategoria(e.target.value)}
@@ -240,18 +238,34 @@ function App() {
                     </div>
                   </div>
 
+                  <div className="alert alert-primary text-center rounded-4 shadow-sm mt-4">
+                    <h5 className="fw-bold mb-3">Resumen de partida</h5>
+
+                    <span className="badge bg-primary me-2 mb-2">
+                      Categoría: {categoria || "Todas"}
+                    </span>
+
+                    <span className="badge bg-success me-2 mb-2">
+                      Dificultad: {dificultad || "Todas"}
+                    </span>
+
+                    <span className="badge bg-warning text-dark mb-2">
+                      Preguntas: {cantidad}
+                    </span>
+                  </div>
+
                   {/* Botón de iniciar */}
-                  <button 
-                    className="btn btn-primary btn-lg w-100 py-3 fw-bold fs-4 mt-3"
+                  <button
+                    className="btn menu-neon-button btn-lg w-100 py-3 fw-bold fs-3 mt-3 shadow rounded-4"
                     onClick={() => setJuegoIniciado(true)}
                   >
-                    Comenzar Partida
+                    🚀 Comenzar Partida
                   </button>
 
                   {/* Separador */}
                   <div className="position-relative my-4">
                     <hr />
-                    <span className="position-absolute top-50 start-50 translate-middle bg-white px-3 text-muted">
+                    <span className="position-absolute top-50 start-50 translate-middle px-3 menu-session-text">
                       {user ? `Sesión iniciada como ${user.displayName}` : 'o inicia sesión'}
                     </span>
                   </div>
@@ -259,7 +273,7 @@ function App() {
                   {/* Login buttons / logout */}
                   {user ? (
                     <div className="mt-3 text-center">
-                      <button className="btn btn-outline-secondary" onClick={handleLogout}>
+                      <button className="btn menu-logout-button" onClick={handleLogout}>
                         Cerrar sesión
                       </button>
                     </div>
@@ -273,7 +287,7 @@ function App() {
           </div>
         ) : (
           <>
-            <TriviaGame 
+            <TriviaGame
               configuracion={configuracionJuego}
               onGameComplete={handleGameComplete}
               traduccionActivada={traduccionActivada}
@@ -281,8 +295,8 @@ function App() {
               onVolverInicio={() => setJuegoIniciado(false)}
             />
             <div className="text-center mt-4">
-              <button 
-                className="btn btn-outline-secondary btn-lg px-5"
+              <button
+                className="btn menu-neon-button btn-lg px-5"
                 onClick={() => setJuegoIniciado(false)}
               >
                 ← Volver al inicio

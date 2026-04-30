@@ -1,30 +1,15 @@
 import Button from "./Button";
 
-export default function NavigationBar () {
+export default function NavigationBar() {
     return (
-       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div className="container-fluid">
+        <nav className="navbar navbar-expand-lg navbar-dark navbar-neon">
+            <div className="w-100 px-4">
 
-        <a className="navbar-brand" href="/">
-          Trivia Game
-        </a>
+                <div className="w-100 text-center">
+                    <span className="navbar-brand m-0">🎮 Trivia Game</span>
+                </div>
 
-        <Button
-        texto= "Login"
-        tipo= "success"
-        onClick={() => alert("Ir a login")}
-        />
-
-        <div className="collapse navbar-collapse" id="navbarContent">
-
-          <ul className="navbar-nav me-auto">
-            <li className="nav-item">
-              <a className="nav-link" href="/">Inicio</a>
-            </li>
-          </ul>
-
-        </div>
-      </div>
-    </nav>
+            </div>
+        </nav>
     );
 }

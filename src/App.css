@@ -215,3 +215,245 @@
     transform: translateY(-15px);
   }
 }
+
+
+/** Decoración Inicio */
+
+.menu-neon-card {
+  background: radial-gradient(circle, #1b2350 0%, #070b1f 100%);
+  color: white;
+  box-shadow: 0 0 25px rgba(255, 139, 216, 0.45) !important;
+}
+
+.menu-neon-header {
+  background: linear-gradient(135deg, #2d2a8f, #7d3fc7);
+  border-bottom: 3px solid #ff8bd8;
+  box-shadow: 0 0 18px #ff8bd8;
+}
+
+.menu-neon-card .card-body {
+  background: transparent;
+}
+
+.menu-neon-card label,
+.menu-neon-card strong {
+  color: white;
+}
+
+.menu-neon-card .form-select,
+.menu-neon-card .form-range,
+.menu-neon-card .form-check-label {
+  color: white;
+}
+
+.menu-neon-card .form-select {
+  background-color: #070b1f;
+  color: white;
+  border: 2px solid #ff8bd8;
+  border-radius: 15px;
+}
+
+.menu-neon-card .alert {
+  background: rgba(45, 42, 143, 0.8);
+  border: 2px solid #ff8bd8;
+  color: white;
+  box-shadow: 0 0 12px rgba(255, 139, 216, 0.5);
+}
+
+.menu-neon-button {
+  background: #070b1f !important;
+  color: white !important;
+  border: 3px solid #ff8bd8 !important;
+  box-shadow: 0 0 15px #305cff;
+  transition: 0.2s;
+}
+
+.menu-neon-button:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 22px #ff8bd8;
+}
+
+/** Decoración de inicio 2 */
+
+.menu-neon-section {
+  background: rgba(7, 11, 31, 0.75);
+  border: 2px solid #ff8bd8;
+  box-shadow: 0 0 12px rgba(255, 139, 216, 0.45);
+  color: white;
+}
+
+.menu-session-text {
+  background: #070b1f;
+  color: white;
+  border: 1px solid #ff8bd8;
+  border-radius: 10px;
+  box-shadow: 0 0 8px rgba(255, 139, 216, 0.4);
+}
+
+.menu-logout-button {
+  color: white !important;
+  border: 2px solid #ff8bd8 !important;
+  background: #070b1f !important;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(48, 92, 255, 0.6);
+}
+
+.menu-logout-button:hover {
+  background: #7d3fc7 !important;
+  color: white !important;
+  box-shadow: 0 0 18px #ff8bd8;
+}
+
+
+
+
+
+.scoreboard-neon-card {
+  background: linear-gradient(135deg, #2d2a8f, #7d3fc7);
+  color: white;
+  border: 2px solid #ff8bd8;
+  box-shadow: 0 0 15px rgba(255, 139, 216, 0.6);
+  border-radius: 15px;
+}
+
+.timer-neon-box {
+  background: rgba(7, 11, 31, 0.85);
+  color: white;
+  border: 2px solid #ff8bd8;
+  border-radius: 15px;
+  padding: 12px 16px;
+  box-shadow: 0 0 12px rgba(255, 139, 216, 0.45);
+}
+
+.answer-neon-card {
+  background: #070b1f;
+  border: 2px solid #ff8bd8;
+  box-shadow: 0 0 18px rgba(255, 139, 216, 0.5);
+  color: white;
+}
+
+.answer-neon-header {
+  background: linear-gradient(135deg, #2d2a8f, #7d3fc7);
+  border-bottom: 2px solid #ff8bd8;
+}
+
+.answer-progress {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.text-neon-success {
+  color: #4dff9b;
+  font-weight: bold;
+}
+
+.gameover-neon {
+  background: radial-gradient(circle, #1b2350 0%, #070b1f 100%);
+  border: 2px solid #ff8bd8;
+  color: white;
+  box-shadow: 0 0 25px rgba(255, 139, 216, 0.6);
+}
+
+.gameover-neon-header {
+  background: linear-gradient(135deg, #2d2a8f, #7d3fc7);
+  border-bottom: 2px solid #ff8bd8;
+}
+
+.text-neon-score {
+  color: #8ab4ff;
+  text-shadow: 0 0 12px rgba(138, 180, 255, 0.8);
+}
+
+.gameover-stat-box {
+  border: 2px solid #ff8bd8;
+  border-radius: 12px;
+  padding: 10px;
+  background: rgba(7, 11, 31, 0.65);
+  box-shadow: 0 0 10px rgba(255, 139, 216, 0.35);
+}
+
+.scoreboard-neon-card,
+.scoreboard-neon-card * {
+  color: white !important;
+}
+
+.gameover-stat-box,
+.gameover-stat-box * {
+  color: white !important;
+}
+
+
+
+.score-number {
+  color: white !important;
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-shadow: 0 0 10px #ff8bd8, 0 0 18px #305cff;
+  animation: scorePulse 0.5s ease-in-out;
+}
+
+@keyframes scorePulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.18);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+
+/** Navbar color */
+
+.navbar-neon {
+  background: linear-gradient(135deg, #2d2a8f, #7d3fc7);
+  border-bottom: 2px solid #ff8bd8;
+  box-shadow: 0 0 15px rgba(255, 139, 216, 0.6);
+}
+
+.navbar-neon .navbar-brand {
+  color: white !important;
+  font-weight: bold;
+  text-shadow: 0 0 8px #ff8bd8;
+}
+
+.navbar-neon .nav-link {
+  color: white !important;
+  transition: 0.2s;
+}
+
+.navbar-neon .nav-link:hover {
+  color: #ff8bd8 !important;
+  transform: scale(1.05);
+}
+
+/** Footer color */
+
+.footer-neon {
+  background: radial-gradient(circle, #1b2350 0%, #070b1f 100%);
+  border-top: 2px solid #ff8bd8;
+  box-shadow: 0 0 15px rgba(255, 139, 216, 0.4);
+  padding: 25px 0;
+}
+
+.footer-neon a {
+  color: white;
+  text-decoration: none;
+}
+
+.footer-neon a:hover {
+  color: #ff8bd8;
+}
+
+.footer-neon,
+.footer-neon * {
+  color: white !important;
+}
+
+.footer-neon small,
+.footer-neon .text-muted {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
