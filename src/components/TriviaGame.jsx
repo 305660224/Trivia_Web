@@ -9,7 +9,7 @@ import { TriviaApi } from './TriviaApi';
 import AnswerResults from './AnswerResults';
 import Button from './Button';
 
-const TriviaGame = ({ configuracion, onGameComplete }) => {
+const TriviaGame = ({ configuracion, onGameComplete, traduccionActivada = false }) => { 
 
   const [preguntas, setPreguntas] = useState([]);
   const [preguntaActual, setPreguntaActual] = useState(null);
@@ -24,9 +24,9 @@ const TriviaGame = ({ configuracion, onGameComplete }) => {
   const [puntosGanados, setPuntosGanados] = useState(0);
 
   const tiempoAgotadoRef = useRef(false);
-  const tiempoRef = useRef(0); // 🔥 tiempo real sincronizado
+  const tiempoRef = useRef(0); // tiempo real sincronizado
 
-  // ⏱️ tiempo por dificultad
+  //  tiempo por dificultad
   const getTiempoPorDificultad = (dificultad) => {
     switch (dificultad?.toLowerCase()) {
       case 'easy': return 30;
@@ -36,7 +36,7 @@ const TriviaGame = ({ configuracion, onGameComplete }) => {
     }
   };
 
-  // 🧮 puntos tipo Kahoot (por rangos)
+  // puntos tipo Kahoot (por rangos)
   const calcularPuntos = (tiempoRestante, tiempoMaximo) => {
     const porcentaje = tiempoRestante / tiempoMaximo;
 
@@ -46,12 +46,12 @@ const TriviaGame = ({ configuracion, onGameComplete }) => {
     return 100;
   };
 
-  // 📥 cargar preguntas
+  // cargar preguntas (MODIFICADO para recibir traduccionActivada)
   useEffect(() => {
     const cargarPreguntas = async () => {
       setCargando(true);
       try {
-        const data = await TriviaApi(configuracion);
+        const data = await TriviaApi(configuracion, traduccionActivada); // 👈 AGREGADO segundo parámetro
         setPreguntas(data);
         setIndiceActual(0);
         setPuntuacion(0);
@@ -66,9 +66,9 @@ const TriviaGame = ({ configuracion, onGameComplete }) => {
     };
 
     cargarPreguntas();
-  }, [configuracion]);
+  }, [configuracion, traduccionActivada]); 
 
-  // 🎯 configurar pregunta
+  //  configurar pregunta
   useEffect(() => {
     if (preguntas.length > 0 && indiceActual < preguntas.length) {
       const pregunta = preguntas[indiceActual];
@@ -77,7 +77,7 @@ const TriviaGame = ({ configuracion, onGameComplete }) => {
 
       setPreguntaActual(pregunta);
       setTiempoRestante(tiempoInicial);
-      tiempoRef.current = tiempoInicial; // 🔥 sincroniza tiempo real
+      tiempoRef.current = tiempoInicial; // sincroniza tiempo real
 
       setRespuestaSeleccionada(false);
      
@@ -91,7 +91,7 @@ const TriviaGame = ({ configuracion, onGameComplete }) => {
     }
   }, [indiceActual, preguntas]);
 
-  // ➡️ siguiente pregunta
+  // siguiente pregunta
   const siguientePregunta = useCallback(() => {
     setIndiceActual((prev) => {
       const siguiente = prev + 1;
@@ -115,7 +115,7 @@ const TriviaGame = ({ configuracion, onGameComplete }) => {
     });
   }, [preguntas.length, onGameComplete, puntuacion, aciertos]);
 
-  // ⏰ tiempo agotado
+  //  tiempo agotado
   const manejarTiempoAgotado = useCallback(() => {
     if (respuestaSeleccionada || tiempoAgotadoRef.current) return;
 
@@ -125,7 +125,7 @@ const TriviaGame = ({ configuracion, onGameComplete }) => {
     
   }, [respuestaSeleccionada, siguientePregunta]);
 
-  // ⏳ timer
+  // timmer
   useEffect(() => {
     if (cargando || juegoTerminado || respuestaSeleccionada || !preguntaActual) return;
 
@@ -133,7 +133,7 @@ const TriviaGame = ({ configuracion, onGameComplete }) => {
       setTiempoRestante((prev) => {
         const nuevoTiempo = prev - 1;
 
-        tiempoRef.current = nuevoTiempo; // 🔥 sincronización real
+        tiempoRef.current = nuevoTiempo; // sincronización real
 
         if (prev <= 1) {
           clearInterval(timer);
@@ -148,7 +148,7 @@ const TriviaGame = ({ configuracion, onGameComplete }) => {
     return () => clearInterval(timer);
   }, [cargando, juegoTerminado, respuestaSeleccionada, preguntaActual, manejarTiempoAgotado]);
 
-  // ✅ responder
+  //  responder
   const manejarRespuesta = useCallback((respuesta) => {
     if (respuestaSeleccionada) return;
 
@@ -169,12 +169,11 @@ const TriviaGame = ({ configuracion, onGameComplete }) => {
       setPuntosGanados(puntosGanados);
       setPuntuacion(prev => prev + puntosGanados);
       setAciertos(prev => prev + 1);
-
     }
 
   }, [preguntaActual, respuestaSeleccionada, siguientePregunta]);
 
-  // 🔄 reiniciar
+  // reiniciar (MODIFICADO para mantener traducción al reiniciar)
   const reiniciarJuego = () => {
     setJuegoTerminado(false);
     setIndiceActual(0);
@@ -185,7 +184,7 @@ const TriviaGame = ({ configuracion, onGameComplete }) => {
 
     const recargar = async () => {
       try {
-        const data = await TriviaApi(configuracion);
+        const data = await TriviaApi(configuracion, traduccionActivada);
         setPreguntas(data);
       } finally {
         setCargando(false);
@@ -251,8 +250,6 @@ const TriviaGame = ({ configuracion, onGameComplete }) => {
   </>
 )}
 
-
-
       <GameOverModal
         show={juegoTerminado}
         puntuacion={puntuacion}
@@ -272,7 +269,8 @@ TriviaGame.propTypes = {
     categoria: PropTypes.string,
     dificultad: PropTypes.string
   }).isRequired,
-  onGameComplete: PropTypes.func
+  onGameComplete: PropTypes.func,
+  traduccionActivada: PropTypes.bool
 };
 
 export default TriviaGame;
