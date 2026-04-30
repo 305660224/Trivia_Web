@@ -278,6 +278,7 @@ function App() {
               onGameComplete={handleGameComplete}
               traduccionActivada={traduccionActivada}
               user={user}
+              onVolverInicio={() => setJuegoIniciado(false)}
             />
             <div className="text-center mt-4">
               <button 

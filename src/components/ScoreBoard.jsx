@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types'; //VALIDACION DATOS
+import PropTypes from 'prop-types'; 
 
 const ScoreBoard = ({ puntuacion, aciertos, total, preguntaActual, porcentaje }) => {
   return (

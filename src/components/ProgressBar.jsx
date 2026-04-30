@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import './ProgressBar.css';
+
 
 const ProgressBar = ({ current = 0, total = 10 }) => {
   const percentage = (current / total) * 100;

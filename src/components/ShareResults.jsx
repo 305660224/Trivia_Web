@@ -3,7 +3,7 @@ import Button from "./Button";
 
 export default function ShareResults({ puntos = 0, total = 0, user = null, config = {} }) {
 
-    // URL del reto con los parámetros de la partida para que el amigo juegue lo mismo
+    
     const generarUrlReto = () => {
         const baseUrl = window.location.origin + window.location.pathname;
         const params = new URLSearchParams({
@@ -16,7 +16,7 @@ export default function ShareResults({ puntos = 0, total = 0, user = null, confi
         return `${baseUrl}?${params}`;
     };
 
-    // Mensaje dinámico según el usuario logueado
+    
     const generarMensaje = () => {
         const nombre = user?.displayName || 'Alguien';
         return `🔥 ¡${nombre} te ha retado en Trivia Game!\n\n` +
