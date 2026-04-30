@@ -21,13 +21,31 @@ export default function ShareResults({ puntos = 0 }) {
         <div className="d-flex justify-content-center gap-2 flex-wrap">
 
             <Button
-                texto="Compartir en Google"
+                texto={
+                    <span>
+                        <img 
+                            src={"./src/imagenes/google.png"} 
+                            alt="Google" 
+                            style={{ width: '20px', height: '20px', marginRight: '8px' }}
+                        />
+                        Compartir en Google
+                    </span>
+                }
                 tipo="danger"
                 onClick={compartirGoogle}
             />
 
             <Button
-                texto="Compartir en Facebook"
+                texto={
+                    <span>
+                        <img 
+                            src={"./src/imagenes/facebook.png"} 
+                            alt="Facebook" 
+                            style={{ width: '20px', height: '20px', marginRight: '8px' }}
+                        />
+                        Compartir en Facebook
+                    </span>
+                }
                 tipo="primary"
                 onClick={compartirFacebook}
             />
