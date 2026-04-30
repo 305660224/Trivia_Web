@@ -8,7 +8,7 @@ export default function Footer() {
           
           <div className="col-md-4 mb-3 mb-md-0">
             <h5 className="fw-bold text-primary mb-1">🎮 Trivia Game</h5>
-            <small className="text-muted">Proyecto Final — 2025</small>
+            <small className="text-muted">Proyecto Final — 2026</small>
           </div>
 
           
