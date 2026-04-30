@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import Layout from './components/Layout';
 import NavigationBar from './components/NavigationBar';
 import TriviaGame from './components/TriviaGame';
 import LoginButtons from './components/LoginButtons';
+import { onUserChange, logout } from './services/authService';
 
 function App() {
   const [juegoIniciado, setJuegoIniciado] = useState(false);
@@ -11,6 +12,44 @@ function App() {
   const [dificultad, setDificultad] = useState('');
   const [cantidad, setCantidad] = useState(10);
   const [traduccionActivada, setTraduccionActivada] = useState(false);
+  const [user, setUser] = useState(null);
+  const [loadingAuth, setLoadingAuth] = useState(true);
+  const [mensajeReto, setMensajeReto] = useState(null); // banner del reto recibido
+
+  // Leer parámetros de URL al cargar (cuando alguien abre un reto compartido)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const cat = params.get('cat');
+    const diff = params.get('diff');
+    const qty = params.get('qty');
+    const retador = params.get('retador');
+    const pts = params.get('pts');
+
+    if (retador) {
+      if (cat) setCategoria(cat);
+      if (diff) setDificultad(diff);
+      if (qty) setCantidad(Number(qty));
+      setMensajeReto({ retador, pts });
+    }
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = onUserChange((currentUser) => {
+      setUser(currentUser);
+      setLoadingAuth(false);
+    });
+    return unsubscribe;
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      setUser(null);
+      setJuegoIniciado(false);
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+    }
+  };
 
   const configuracionJuego = {
     cantidad: cantidad,
@@ -22,6 +61,16 @@ function App() {
     console.log('Juego completado:', resultados);
   };
 
+  if (loadingAuth) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+        <div className="spinner-border" role="status">
+          <span className="visually-hidden">Cargando...</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <Layout>
       <NavigationBar />
@@ -30,6 +79,14 @@ function App() {
         {!juegoIniciado ? (
           <div className="row justify-content-center">
             <div className="col-lg-8 col-md-10">
+
+              {/* BANNER DE RETO - solo aparece si abriste un link de reto */}
+              {mensajeReto && (
+                <div className="alert alert-warning text-center fw-bold mb-4 rounded-4 shadow-sm">
+                  🔥 <strong>{mensajeReto.retador}</strong> te ha retado con <strong>{mensajeReto.pts} puntos</strong>. ¡La partida ya está configurada, superalo!
+                </div>
+              )}
+
               {/* ENCABEZADO PAGINA */}
               <div className="text-center mb-5">
                 <h1 className="display-3 fw-bold text-primary mb-3">Trivia Game Project</h1>
@@ -70,7 +127,7 @@ function App() {
                   </div>
                 
                 <div className="card-body p-4">
-                  {/* SELECCION DE CATEGORIa */}
+                  {/* SELECCION DE CATEGORIA */}
                   <div className="mb-4">
                     <label className="form-label fw-bold mb-2">
                       <i className="bi bi-tag-fill me-2 text-primary"></i>
@@ -195,12 +252,21 @@ function App() {
                   <div className="position-relative my-4">
                     <hr />
                     <span className="position-absolute top-50 start-50 translate-middle bg-white px-3 text-muted">
-                      o inicia sesión
+                      {user ? `Sesión iniciada como ${user.displayName}` : 'o inicia sesión'}
                     </span>
                   </div>
 
-                  {/* Login buttons mejorados */}
-                  <LoginButtons />
+                  {/* Login buttons / logout */}
+                  {user ? (
+                    <div className="mt-3 text-center">
+                      <button className="btn btn-outline-secondary" onClick={handleLogout}>
+                        Cerrar sesión
+                      </button>
+                    </div>
+                  ) : (
+                    <LoginButtons onLoginSuccess={setUser} />
+                  )}
+
                 </div>
               </div>
             </div>
@@ -211,6 +277,7 @@ function App() {
               configuracion={configuracionJuego}
               onGameComplete={handleGameComplete}
               traduccionActivada={traduccionActivada}
+              user={user}
             />
             <div className="text-center mt-4">
               <button 

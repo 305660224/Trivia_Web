@@ -9,7 +9,7 @@ import { TriviaApi } from './TriviaApi';
 import AnswerResults from './AnswerResults';
 import Button from './Button';
 
-const TriviaGame = ({ configuracion, onGameComplete, traduccionActivada = false }) => { 
+const TriviaGame = ({ configuracion, onGameComplete, traduccionActivada = false, user }) => { 
 
   const [preguntas, setPreguntas] = useState([]);
   const [preguntaActual, setPreguntaActual] = useState(null);
@@ -257,6 +257,8 @@ const TriviaGame = ({ configuracion, onGameComplete, traduccionActivada = false 
         total={preguntas.length}
         porcentaje={Math.round((aciertos / preguntas.length) * 100)}
         onReiniciar={reiniciarJuego}
+        user={user}
+        config={configuracion}
       />
 
     </div>
@@ -270,7 +272,8 @@ TriviaGame.propTypes = {
     dificultad: PropTypes.string
   }).isRequired,
   onGameComplete: PropTypes.func,
-  traduccionActivada: PropTypes.bool
+  traduccionActivada: PropTypes.bool,
+  user: PropTypes.object
 };
 
 export default TriviaGame;

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import Button from './Button';
 import ShareResults from './ShareResults';
 
-const GameOverModal = ({ show, puntuacion, aciertos, total, porcentaje, onReiniciar }) => {
+const GameOverModal = ({ show, puntuacion, aciertos, total, porcentaje, onReiniciar, user, config }) => {
   if (!show) return null;
 
   return (
@@ -43,7 +43,7 @@ const GameOverModal = ({ show, puntuacion, aciertos, total, porcentaje, onReinic
               </div>
             </div>
             
-            <ShareResults puntos={puntuacion} />
+            <ShareResults puntos={puntuacion} total={total} user={user} config={config} />
           </div>
           
           <div className="modal-footer justify-content-center">
@@ -65,7 +65,9 @@ GameOverModal.propTypes = {
   aciertos: PropTypes.number.isRequired,
   total: PropTypes.number.isRequired,
   porcentaje: PropTypes.number.isRequired,
-  onReiniciar: PropTypes.func.isRequired
+  onReiniciar: PropTypes.func.isRequired,
+  user: PropTypes.object,
+  config: PropTypes.object
 };
 
 export default GameOverModal;
