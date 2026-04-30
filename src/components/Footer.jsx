@@ -39,7 +39,7 @@ export default function Footer() {
         <hr className="border-secondary mt-3 mb-2" />
 
         <p className="text-center text-muted mb-0" style={{ fontSize: '0.75rem' }}>
-          © 2025 Trivia Game · UTN Sede Guanacaste · Todos los derechos reservados
+          © 2026 Trivia Game · UTN Sede Guanacaste · Todos los derechos reservados
         </p>
 
       </div>
