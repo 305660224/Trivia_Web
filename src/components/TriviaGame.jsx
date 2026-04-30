@@ -11,7 +11,8 @@ import Button from './Button';
 import musicaFondo from '../audio/musica.mp3'; // 👈 AJUSTA LA RUTA
 import audioRespuesta from '../audio/respuesta.mp3'; // 👈 AJUSTA LA RUTA
 
-const TriviaGame = ({ configuracion, onGameComplete, traduccionActivada = false, user }) => { 
+
+const TriviaGame = ({ configuracion, onGameComplete, traduccionActivada = false, user }) => {
 
   const [preguntas, setPreguntas] = useState([]);
   const [preguntaActual, setPreguntaActual] = useState(null);
@@ -24,6 +25,7 @@ const TriviaGame = ({ configuracion, onGameComplete, traduccionActivada = false,
   const [respuestaSeleccionada, setRespuestaSeleccionada] = useState(false);
   const [estadisticas, setEstadisticas] = useState({})
   const [puntosGanados, setPuntosGanados] = useState(0);
+  const [animacionPregunta, setAnimacionPregunta] = useState("fade-in");
 
   const tiempoAgotadoRef = useRef(false);
   const tiempoRef = useRef(0);
@@ -88,7 +90,7 @@ const TriviaGame = ({ configuracion, onGameComplete, traduccionActivada = false,
         setAciertos(0);
         setJuegoTerminado(false);
         setRespuestaSeleccionada(false);
-        
+
         // 👈 INICIAR MÚSICA DE FONDO
         if (audioFondoRef.current) {
           audioFondoRef.current.currentTime = 0;
@@ -104,7 +106,7 @@ const TriviaGame = ({ configuracion, onGameComplete, traduccionActivada = false,
     };
 
     cargarPreguntas();
-  }, [configuracion, traduccionActivada]); 
+  }, [configuracion, traduccionActivada]);
 
   // 🎯 configurar pregunta
   useEffect(() => {
@@ -118,7 +120,9 @@ const TriviaGame = ({ configuracion, onGameComplete, traduccionActivada = false,
       tiempoRef.current = tiempoInicial;
 
       setRespuestaSeleccionada(false);
-     
+      setPuntosGanados(0);
+      setAnimacionPregunta("fade-in");
+
       tiempoAgotadoRef.current = false;
 
       const conteo = {}
@@ -131,34 +135,32 @@ const TriviaGame = ({ configuracion, onGameComplete, traduccionActivada = false,
 
   // ➡️ siguiente pregunta
   const siguientePregunta = useCallback(() => {
-    setIndiceActual((prev) => {
-      const siguiente = prev + 1;
+    setAnimacionPregunta("fade-out");
 
-      if (siguiente >= preguntas.length) {
-        setJuegoTerminado(true);
-        
-        // 👈 PAUSAR MÚSICA AL TERMINAR
-        if (audioFondoRef.current) {
-          audioFondoRef.current.pause();
+    setTimeout(() => {
+      setIndiceActual((prev) => {
+        const siguiente = prev + 1;
+
+        if (siguiente >= preguntas.length) {
+          setJuegoTerminado(true);
+
+          if (onGameComplete) {
+            onGameComplete({
+              puntuacion,
+              aciertos,
+              total: preguntas.length,
+              porcentaje: Math.round((aciertos / preguntas.length) * 100)
+            });
+          }
+
+          return prev;
         }
 
-        if (onGameComplete) {
-          onGameComplete({
-            puntuacion,
-            aciertos,
-            total: preguntas.length,
-            porcentaje: Math.round((aciertos / preguntas.length) * 100)
-          });
-        }
+        reanudarMusicaFondo();
 
-        return prev;
-      }
-
-      // 👈 REANUDAR MÚSICA AL SIGUIENTE
-      reanudarMusicaFondo();
-
-      return siguiente;
-    });
+        return siguiente;
+      });
+    }, 400);
   }, [preguntas.length, onGameComplete, puntuacion, aciertos]);
 
   // ⏰ tiempo agotado
@@ -167,13 +169,13 @@ const TriviaGame = ({ configuracion, onGameComplete, traduccionActivada = false,
 
     tiempoAgotadoRef.current = true;
     setRespuestaSeleccionada(true);
-    
+
     // 👈 PAUSAR MÚSICA DE FONDO
     pausarMusicaFondo();
-    
+
     // 👈 REPRODUCIR AUDIO DE RESPUESTA
     reproducirAudioRespuesta();
-    
+
   }, [respuestaSeleccionada]);
 
   // ⏳ timer
@@ -207,7 +209,7 @@ const TriviaGame = ({ configuracion, onGameComplete, traduccionActivada = false,
 
     // 👈 PAUSAR MÚSICA DE FONDO
     pausarMusicaFondo();
-    
+
     // 👈 REPRODUCIR AUDIO DE RESPUESTA
     reproducirAudioRespuesta();
 
@@ -242,7 +244,7 @@ const TriviaGame = ({ configuracion, onGameComplete, traduccionActivada = false,
       try {
         const data = await TriviaApi(configuracion, traduccionActivada);
         setPreguntas(data);
-        
+
         // 👈 REINICIAR MÚSICA
         if (audioFondoRef.current) {
           audioFondoRef.current.currentTime = 0;
@@ -268,7 +270,7 @@ const TriviaGame = ({ configuracion, onGameComplete, traduccionActivada = false,
   return (
     <div className="container py-4">
       {/*AUDIO DE FONDO (loop) */} <audio ref={audioFondoRef} src={musicaFondo} loop />
-      
+
       {/*AUDIO DE RESPUESTA */}
       <audio ref={audioRespuestaRef} src={audioRespuesta} />
 
@@ -285,15 +287,17 @@ const TriviaGame = ({ configuracion, onGameComplete, traduccionActivada = false,
         tiempoMaximo={getTiempoPorDificultad(preguntaActual.dificultad)}
       />
 
-      <QuestionCard
-        pregunta={preguntaActual.pregunta}
-        dificultad={preguntaActual.dificultad}
-        numero={indiceActual + 1}
-        total={preguntas.length}
-        opciones={preguntaActual.opciones}
-        onRespuesta={manejarRespuesta}
-        deshabilitado={respuestaSeleccionada}
-      />
+      <div className={animacionPregunta}>
+        <QuestionCard
+          pregunta={preguntaActual.pregunta}
+          dificultad={preguntaActual.dificultad}
+          numero={indiceActual + 1}
+          total={preguntas.length}
+          opciones={preguntaActual.opciones}
+          onRespuesta={manejarRespuesta}
+          deshabilitado={respuestaSeleccionada}
+        />
+      </div>
 
       {respuestaSeleccionada && (
         <>
